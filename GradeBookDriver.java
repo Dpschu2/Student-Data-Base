@@ -13,19 +13,31 @@ public class GradeBookDriver {
 
         switch (choice.substring(0,1).toLowerCase()){
             case "a":
-                //call method for a stuff
+                addData();
                 break;
             case "s":
-                //call method for b stuff
+                saveData();
                 break;
             case "g":
-                //call method for g stuff
+                studentsPerGrade();
                 break;
             case "e":
-                //exit
+                System.exit(0);
                 break;
         }
-	}
+    }
+    public void addData(){
+
+    }
+    public void saveData(){
+
+    }
+    public void studentsPerGrade(){
+
+    }
+    public void exit(){
+        System.exit(0);
+    }
 	public static void displayMenu(){
         System.out.println("Welcome to Grade Book Manager");
         System.out.println("Please enter the following");
