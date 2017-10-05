@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -14,8 +15,9 @@ public class GradeBookDriver {
 	public static ArrayList<String> layer1 = new ArrayList<>();
 	public static ArrayList<String> layer2 = new ArrayList<>();
 	public static ArrayList<String> layer3 = new ArrayList<>();
-	
+
 	public static void main(String[] args) {
+		//addLineToFile("hullo", "file.txt"); to test the method i created
 		setUp("226-fall-1996.csv");
 		setUp("326-fall-1996.csv");
 		setUp("326-fall-1997.csv");
@@ -44,15 +46,15 @@ public class GradeBookDriver {
 	        }
         } while(flag);
     }
-	
-	
-	
+
+
+
     public static void addData(){
     	boolean more = true;
     	int iterate = 0;
     	Scanner kb = new Scanner(System.in);
     	do {
-    		if(iterate != 0) 
+    		if(iterate != 0)
     			kb.nextLine();
     		iterate++;
 	    	System.out.print("Enter a file name to add to repository: ");
@@ -99,7 +101,7 @@ public class GradeBookDriver {
 	    	}
     	} while(more);
     }
-    
+
                     // Doesnt write to new csv file!
     public static void saveData(){
     	boolean more = false;
@@ -113,11 +115,12 @@ public class GradeBookDriver {
     			for (String a : s) {
     				if (a.equals(studentID)) {
     					try {
-    						PrintWriter pw = new PrintWriter(new File("student.csv"));
+    						  PrintWriter pw = new PrintWriter(new File("student.csv"));
     					    StringBuilder sb = new StringBuilder();
     						//fileWriter = new FileWriter((System.getProperty("user.home")+"/student.csv"), true);
     						sb.append(categories.get(0) + "\n" + element + "\n");
     						pw.write(sb.toString());
+								pw.close();//this line should fix the issue.
     					}
     					catch(Exception e) {
     						System.out.println("Error in CsvFileWriter !!!");
@@ -133,18 +136,37 @@ public class GradeBookDriver {
     		System.out.println("Not an option!");
     	}
     }
-    
-    
+		/**
+		* Adds a line to a file that has already been created.
+		* If the file has not yet been created. Then a file will be created
+		* And the first line will be the line parameter
+		*
+		*@param line -String that you want to add
+		*@param pathToFile - that you want to append the line too
+		*@author Michael Metz
+		*/
+    private static void addLineToFile(String line, String pathToFile){
+			PrintWriter writer = null;
+			try{
+				writer = new PrintWriter( new FileOutputStream(pathToFile, true));
+			}catch(FileNotFoundException e){
+				System.out.println("file not found " + pathToFile);
+			}
+			writer.println(line);
+
+			writer.close();
+		}
+
     public static void studentsPerGrade(){
 
     }
-    
-    
+
+
     public void exit(){
         System.exit(0);
     }
-    
-    
+
+
 	public static void displayMenu(){
 
         System.out.println("\nPlease enter the following");
@@ -162,7 +184,7 @@ public class GradeBookDriver {
         String cvsSplitBy = ",";
 
         try {
-            br = new BufferedReader(new FileReader(csvFile)); 
+            br = new BufferedReader(new FileReader(csvFile));
             while ((line = br.readLine()) != null) {
 
                 String[] categories = line.split(cvsSplitBy);
@@ -176,7 +198,7 @@ public class GradeBookDriver {
                 	if(s.equals("326-fall-1997.csv")) {
                 		layer3.add(categories[i]);
                 	}
-              
+
                }
             }
 
@@ -193,7 +215,7 @@ public class GradeBookDriver {
                 }
             }
         }
-        
+
     }
 
 }
