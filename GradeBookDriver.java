@@ -18,9 +18,12 @@ public class GradeBookDriver {
 
 	public static void main(String[] args) {
 		//addLineToFile("hullo", "file.txt"); to test the method i created
-		setUp("226-fall-1996.csv");
-		setUp("326-fall-1996.csv");
-		setUp("326-fall-1997.csv");
+		String file1 = "226-fall-1996.csv";
+		String file2 = "326-fall-1996.csv";
+		String file3 = "326-fall-1997.csv";
+		setUp(file1);
+		setUp(file2);
+		setUp(file3);
         System.out.println("Welcome to Grade Book Manager");
         Scanner kb = new Scanner(System.in);
         boolean flag = true;
@@ -35,7 +38,14 @@ public class GradeBookDriver {
 	                saveData();
 	                break;
 	            case "g":
-	                studentsPerGrade();
+	                if(studentsPerGrade() != null) {
+	                	int[] grades = studentsPerGrade();
+	                	System.out.println("\nA: " + grades[0]);
+	                	System.out.println("B: " + grades[1]);
+	                	System.out.println("C: " + grades[2]);
+	                	System.out.println("D: " + grades[3]);
+	                	System.out.println("F: " + grades[4] + "\n");
+	                }
 	                break;
 	            case "e":
 	                System.exit(0);
@@ -154,8 +164,25 @@ public class GradeBookDriver {
 			writer.close();
 	}
 
-    public static void studentsPerGrade(){
-
+    public static int[] studentsPerGrade(){
+    	int[] grades = null;
+    	boolean more = true;
+    	Scanner kb = new Scanner(System.in);
+    	System.out.print("Enter course number or \"none\" to skip: ");
+    	String courseNumber = kb.nextLine();
+    	System.out.print("Enter semester and year or \"none\" to skip: ");
+    	String semYear = kb.nextLine();
+    	if(semYear.equals("none") && courseNumber.equals("none"))
+    		more = false;
+    	for (ArrayList<String> userPicked : mainArray) {
+    		//find which files to use
+    	}
+    	if(more) {
+    		grades = new int[5];
+    		//Get grades and place in array (A, B, C, D, F)
+    	}
+    	
+    	return grades;
     }
 
 
