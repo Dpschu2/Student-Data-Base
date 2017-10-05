@@ -102,33 +102,31 @@ public class GradeBookDriver {
     	} while(more);
     }
 
-                    // Doesnt write to new csv file!
     public static void saveData(){
     	boolean more = false;
-    	//FileWriter fileWriter = null;
     	System.out.print("Enter student ID: ");
     	Scanner kb = new Scanner(System.in);
     	String studentID = kb.nextLine();
     	for (ArrayList<String> categories : mainArray) {
     		for (String element : categories) {
-    			String[] s = element.split(",");
-    			for (String a : s) {
-    				if (a.equals(studentID)) {
-    					try {
-    						  PrintWriter pw = new PrintWriter(new File("student.csv"));
-    					    StringBuilder sb = new StringBuilder();
-    						//fileWriter = new FileWriter((System.getProperty("user.home")+"/student.csv"), true);
-    						sb.append(categories.get(0) + "\n" + element + "\n");
-    						pw.write(sb.toString());
-								pw.close();//this line should fix the issue.
-    					}
-    					catch(Exception e) {
-    						System.out.println("Error in CsvFileWriter !!!");
-    						e.printStackTrace();
-    					}
-    					more = true;
-    					System.out.println("\nCSV file was created successfully !!!");
-    				}
+    			String[] s = element.split("\n");
+    			for (String str : s) {
+    				String[] line = str.split(",");
+	    			for (String a : line) {
+	    				if (a.equals(studentID)) {
+	    					try {
+	    						addLineToFile(categories.get(0), "student.csv");	
+	    						addLineToFile(str, "student.csv");
+	    						addLineToFile("\n", "student.csv");
+	    					}
+	    					catch(Exception e) {
+	    						System.out.println("Error in CsvFileWriter !!!");
+	    						e.printStackTrace();
+	    					}
+	    					more = true;
+	    					System.out.println("\nCSV file was created successfully !!!");
+	    				}
+	    			}
     			}
     		}
     	}
@@ -152,18 +150,12 @@ public class GradeBookDriver {
 			}catch(FileNotFoundException e){
 				System.out.println("file not found " + pathToFile);
 			}
-			writer.println(line);
-
+			writer.print(line);
 			writer.close();
-		}
+	}
 
     public static void studentsPerGrade(){
 
-    }
-
-
-    public void exit(){
-        System.exit(0);
     }
 
 
@@ -181,7 +173,7 @@ public class GradeBookDriver {
         String csvFile = s;
         BufferedReader br = null;
         String line = "";
-        String cvsSplitBy = ",";
+        String cvsSplitBy = "\n";
 
         try {
             br = new BufferedReader(new FileReader(csvFile));
@@ -190,13 +182,13 @@ public class GradeBookDriver {
                 String[] categories = line.split(cvsSplitBy);
                 for(int i =  0; i < categories.length; i++){
                 	if(s.equals("226-fall-1996.csv")) {
-                		layer1.add(categories[i]);
+                		layer1.add(categories[i] + "\n");
                 	}
                 	if(s.equals("326-fall-1996.csv")) {
-                		layer2.add(categories[i]);
+                		layer2.add(categories[i] + "\n");
                 	}
                 	if(s.equals("326-fall-1997.csv")) {
-                		layer3.add(categories[i]);
+                		layer3.add(categories[i] + "\n");
                 	}
 
                }
@@ -215,7 +207,5 @@ public class GradeBookDriver {
                 }
             }
         }
-
     }
-
 }
