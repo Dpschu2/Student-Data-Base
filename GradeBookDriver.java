@@ -12,15 +12,18 @@ import java.util.Scanner;
 public class GradeBookDriver {
 
 	public static ArrayList<ArrayList<String>> mainArray = new ArrayList<>();
+	public static ArrayList<ArrayList<String>> tempArray = new ArrayList<>();
 	public static ArrayList<String> layer1 = new ArrayList<>();
 	public static ArrayList<String> layer2 = new ArrayList<>();
 	public static ArrayList<String> layer3 = new ArrayList<>();
+	public static String usedFiles = "";
+	public static String file1 = "226-fall-1996.csv";
+	public static String file2 = "326-fall-1996.csv";
+	public static String file3 = "326-fall-1997.csv";
 
 	public static void main(String[] args) {
 		//addLineToFile("hullo", "file.txt"); to test the method i created
-		String file1 = "226-fall-1996.csv";
-		String file2 = "326-fall-1996.csv";
-		String file3 = "326-fall-1997.csv";
+
 		setUp(file1);
 		setUp(file2);
 		setUp(file3);
@@ -38,13 +41,9 @@ public class GradeBookDriver {
 	                saveData();
 	                break;
 	            case "g":
-	                if(studentsPerGrade() != null) {
-	                	int[] grades = studentsPerGrade();
-	                	System.out.println("\nA: " + grades[0]);
-	                	System.out.println("B: " + grades[1]);
-	                	System.out.println("C: " + grades[2]);
-	                	System.out.println("D: " + grades[3]);
-	                	System.out.println("F: " + grades[4] + "\n");
+	            	int[] grades = studentsPerGrade();
+	                if(grades != null) {
+	                	System.out.println("\n\nA: " + grades[0] + "  B: " + grades[1] + "  C: " + grades[2] + "  D: " + grades[3] + "  F: " + grades[4]);
 	                }
 	                break;
 	            case "e":
@@ -167,25 +166,102 @@ public class GradeBookDriver {
     public static int[] studentsPerGrade(){
     	int[] grades = null;
     	boolean more = true;
+    	int i1 = 0, i2 = 0;
+    	int[] crs = new int[3], sem = new int[3];
+    	int aGrade = 0, bGrade = 0, cGrade = 0, dGrade = 0, fGrade = 0;
     	Scanner kb = new Scanner(System.in);
     	System.out.print("Enter course number or \"none\" to skip: ");
     	String courseNumber = kb.nextLine();
-    	System.out.print("Enter semester and year or \"none\" to skip: ");
+    	System.out.print("Enter semester and year(ex:fall 1997) or \"none\" to skip: ");
     	String semYear = kb.nextLine();
     	if(semYear.equals("none") && courseNumber.equals("none"))
     		more = false;
-    	for (ArrayList<String> userPicked : mainArray) {
-    		//find which files to use
-    	}
+    	if(!semYear.contains("1997") && !semYear.contains("1996") && !semYear.contains("fall"))
+    		more = false;
+    	if(!courseNumber.contains("226") && !courseNumber.contains("326"))
+    		more = false;
     	if(more) {
-    		grades = new int[5];
-    		//Get grades and place in array (A, B, C, D, F)
+        	if(courseNumber.equals("226")) {
+        		crs[i1] = 1;
+        		i1++;
+        	}
+        	if(courseNumber.equals("326")) {
+        		crs[i1] = 2;
+        		i1++;
+        		crs[i1] = 3;
+        		i1++;
+        	}
+        	if(semYear.contains("1997")) {
+        		sem[i2] = 3;
+        		i2++;
+        	}
+        	if(semYear.contains("1996")) {
+        		sem[i2] = 1;
+        		i2++;
+        		sem[i2] = 2;
+        		i2++;
+        	}
+        	int[] sorted = sort(crs, sem);
+        	for(int i = 0; i < sorted.length; i++) {
+        		if(sorted[i] == 1)
+        			tempArray.add(layer1);
+        		if(sorted[i] == 2)
+        			tempArray.add(layer2);
+        		if(sorted[i] == 3)
+        			tempArray.add(layer3);
+        	}
+        	
+        	for (ArrayList<String> userPicked : tempArray) {
+        		for (String element : userPicked) {
+        			String[] s = element.split("\n");
+        			for (String str : s) {
+        				String[] line = str.split(",");
+    	    			if (line[line.length - 1].equals("A")) {
+	    					aGrade++;
+	    				}
+    	    			if (line[line.length - 1].equals("B")) {
+	    					bGrade++;
+	    				}
+    	    			if (line[line.length - 1].equals("C")) {
+	    					cGrade++;
+	    				}
+    	    			if (line[line.length - 1].equals("D")) {
+	    					dGrade++;
+	    				}
+    	    			if (line[line.length - 1].equals("F")) {
+	    					fGrade++;
+	    				}
+        			}
+        		}
+        	}
+    		
     	}
-    	
+    	grades = new int[]{aGrade, bGrade, cGrade, dGrade, fGrade};
     	return grades;
     }
 
-
+    public static int[] sort(int[] crs, int[] sem) {
+    	int[] combined = new int[3];
+    	int i = 0;
+    	for(int j = 0; j < crs.length; j++) {
+    		for(int k = 0; k < sem.length; k++) {
+    			if(crs[j] == 1 && sem[k] == 1) {
+    	    		combined[i] = 1;
+    	    		i++;
+    	    	}
+    			if(crs[j] == 2 && sem[k] == 2) {
+    	    		combined[i] = 2;
+    	    		i++;
+    	    	}
+    			if(crs[j] == 3 && sem[k] == 3) {
+    	    		combined[i] = 3;
+    	    		i++;
+    	    	}
+    		}
+    	}
+    	return combined;
+    }
+    
 	public static void displayMenu(){
 
         System.out.println("\nPlease enter the following");
@@ -210,12 +286,15 @@ public class GradeBookDriver {
                 for(int i =  0; i < categories.length; i++){
                 	if(s.equals("226-fall-1996.csv")) {
                 		layer1.add(categories[i] + "\n");
+                		usedFiles += "226-fall-1996\n";
                 	}
                 	if(s.equals("326-fall-1996.csv")) {
                 		layer2.add(categories[i] + "\n");
+                		usedFiles += "326-fall-1996\n";
                 	}
                 	if(s.equals("326-fall-1997.csv")) {
                 		layer3.add(categories[i] + "\n");
+                		usedFiles += "326-fall-1997\n";
                 	}
 
                }
