@@ -181,24 +181,24 @@ public class GradeBookDriver {
     	if(!courseNumber.contains("226") && !courseNumber.contains("326"))
     		more = false;
     	if(more) {
-        	if(courseNumber.equals("226")) {
+        	if(courseNumber.equals("226") || courseNumber.equals("none")) {
         		crs[i1] = 1;
         		i1++;
         	}
-        	if(courseNumber.equals("326")) {
+        	if(courseNumber.equals("326") || courseNumber.equals("none")) {
         		crs[i1] = 2;
         		i1++;
         		crs[i1] = 3;
         		i1++;
         	}
-        	if(semYear.contains("1997")) {
-        		sem[i2] = 3;
-        		i2++;
-        	}
-        	if(semYear.contains("1996")) {
+        	if(semYear.contains("1996") || semYear.equals("none")) {
         		sem[i2] = 1;
         		i2++;
         		sem[i2] = 2;
+        		i2++;
+        	}
+        	if(semYear.contains("1997") || semYear.equals("none")) {
+        		sem[i2] = 3;
         		i2++;
         	}
         	int[] sorted = sort(crs, sem);
@@ -210,9 +210,6 @@ public class GradeBookDriver {
         		if(sorted[i] == 3)
         			tempArray.add(layer3);
         	}
-        	
-        	
-        	
         	for (ArrayList<String> userPicked : getArrayList(tempArray, mainArray)) {
         		for (String element : userPicked) {
         			String[] s = element.split("\n");
@@ -236,12 +233,14 @@ public class GradeBookDriver {
         			}
         		}
         	}
-    		
+        	grades = new int[]{aGrade, bGrade, cGrade, dGrade, fGrade};
     	}
-    	grades = new int[]{aGrade, bGrade, cGrade, dGrade, fGrade};
+    	aGrade = 0; bGrade = 0; cGrade = 0; dGrade = 0; fGrade = 0;
     	return grades;
     }
 
+    
+    
     public static ArrayList<ArrayList<String>> getArrayList(ArrayList<ArrayList<String>> temp, ArrayList<ArrayList<String>> main){
     	ArrayList<ArrayList<String>> newArray = new ArrayList<ArrayList<String>>();
     	for(ArrayList<String> layer : main) {
@@ -252,6 +251,8 @@ public class GradeBookDriver {
     	}
     	return newArray;
     }
+    
+    
     
     public static int[] sort(int[] crs, int[] sem) {
     	int[] combined = new int[3];
@@ -328,3 +329,4 @@ public class GradeBookDriver {
         }
     }
 }
+
