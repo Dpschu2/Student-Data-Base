@@ -211,7 +211,9 @@ public class GradeBookDriver {
         			tempArray.add(layer3);
         	}
         	
-        	for (ArrayList<String> userPicked : tempArray) {
+        	
+        	
+        	for (ArrayList<String> userPicked : getArrayList(tempArray, mainArray)) {
         		for (String element : userPicked) {
         			String[] s = element.split("\n");
         			for (String str : s) {
@@ -240,6 +242,17 @@ public class GradeBookDriver {
     	return grades;
     }
 
+    public static ArrayList<ArrayList<String>> getArrayList(ArrayList<ArrayList<String>> temp, ArrayList<ArrayList<String>> main){
+    	ArrayList<ArrayList<String>> newArray = new ArrayList<ArrayList<String>>();
+    	for(ArrayList<String> layer : main) {
+    		for(ArrayList<String> layer2 : temp) {
+    			if (layer == layer2)
+    				newArray.add(layer);
+    		}
+    	}
+    	return newArray;
+    }
+    
     public static int[] sort(int[] crs, int[] sem) {
     	int[] combined = new int[3];
     	int i = 0;
