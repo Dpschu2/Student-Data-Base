@@ -1,3 +1,4 @@
+
 /**
  * This class contains static methods that can be used throughout the program.
  * These methods are more specifically useful throughout when reading as input
@@ -71,4 +72,69 @@ public class Utility {
         return countOccurrences(needle, haystack, num);
 
     }
+
+    /**
+     * works just like String.split(",");,
+     * but if there is the deliminator is between two quotes then it will not be treated as a deliminator
+     * ex.
+     * ben,zobrist, "Metz, Michael", jose, altuve
+     *
+     * would return and array with the following elements
+     *
+     * ["ben", "zobrist", "Metz, Michael", "jose", "altuve"]
+     *
+     * @param line - string that you want to split apart
+     * @param deliminator - split apart by
+     * @return an array of delimited strings
+     */
+    public static String[] splitLineByDeliminatorButIngoreIfInBetweenQuotes(String line, char deliminator){
+        return line.split(Character.toString(deliminator));
+
+        //Adam below is my attempt at this method.
+
+
+        //        ArrayList<String> list = new ArrayList<String>(10);
+//
+//        int delimIndex = line.indexOf(deliminator);
+//
+//        while(delimIndex != -1)
+//        {
+//             delimIndex = line.indexOf(",");
+//
+//            String beforeDelim = line.substring(0,delimIndex);
+//            String afterDelim = line.substring(delimIndex+1);
+//            //check if there is a " behind the delim and a " after the delim.
+//            int quoteCountBeforeDelim = countOccurrences("\"", beforeDelim);
+//            int quoteCountAfterDelim = countOccurrences("\"", afterDelim);
+//
+//            if(! (isOdd(quoteCountBeforeDelim)))
+//            {
+//                //number of quotes before delim is even ex. { "example", }
+//                //therefore this is a valid delimiter.
+//            }
+//            if(isOdd(quoteCountAfterDelim))
+//            //if so do not treat this comma as a delimiter and go to the next one.
+//
+//            //get everything after the deliminator
+//            break;
+//        }
+//
+//
+//        return new String[3];
+    }
+
+    /**
+     * Checks if a number is odd or even
+     *  0%2 = 0 so this will return true;
+     * -1%2 = -1 so it will return false;
+     * @param n - number
+     * @return true if number is odd, false of number is even.
+     */
+    private static boolean isOdd(int n){
+        if(n%2 == 0)
+            return true;
+        else
+            return false;
+    }
+
 }
