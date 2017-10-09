@@ -2,12 +2,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 public class GradeBookDriver {
@@ -94,7 +92,7 @@ public class GradeBookDriver {
         course = filenameArray[0];
         semster = filenameArray[1];
         year = filenameArray[2];
-
+        //TODO strip the '.csv' form the end of year
 
         //ii. Read the provided file (if it exists), extract the data and add it to the repository
         Scanner fileReader = null;
@@ -176,7 +174,7 @@ public class GradeBookDriver {
         GradeBook newBook = new GradeBook();
         newBook.setBook(file);
         newBook.setCourseNumber(course);
-        newBook.setSemesterSeason(semster);
+        newBook.setSemester(semster);
         newBook.setYear(year);
         gradeBookRepo.addGradeBook(newBook);
         newBook.printBookDetails();
