@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
 
 /**
  * This class contains static methods that can be used throughout the program.
@@ -76,65 +80,110 @@ public class Utility {
     /**
      * works just like String.split(",");,
      * but if there is the deliminator is between two quotes then it will not be treated as a deliminator
+     *
      * ex.
-     * ben,zobrist, "Metz, Michael", jose, altuve
+     * {ben,zobrist, "Metz, Michael", jose, altuve}
      *
      * would return and array with the following elements
      *
-     * ["ben", "zobrist", "Metz, Michael", "jose", "altuve"]
+     * ["ben", "zobrist", "\"Metz, Michael\"", "jose", "altuve"]
      *
+     * Known Issues.
+     * if there is a quoted deliminator at the last index in a deliminator string
+     * ex.
+     * {ben ,zobrist, jose, altuve,"Metz, Michael"}
+     * it will still treat that quoted deliminator as a deliminator.
+     * ["ben", "zobrist", "jose", "altuve", "\"Metz", "Michael\""]
+     *
+     * The method uses stack and queue data structure, Which works for the most part, but im sure there is a better
+     * way to tackle this problem
+     *
+     * @author Michael Metz
      * @param line - string that you want to split apart
      * @param deliminator - split apart by
      * @return an array of delimited strings
      */
     public static String[] splitLineByDeliminatorButIngoreIfInBetweenQuotes(String line, char deliminator){
-        return line.split(Character.toString(deliminator));
 
-        //Adam below is my attempt at this method.
+        char[] lineArray = line.toCharArray();
 
+        Stack<Character> lineStack = new Stack<Character>();
+        ArrayList<String> splitList = new ArrayList<>(15);
+        LinkedList<Character> splitStack = new LinkedList<>();
 
-        //        ArrayList<String> list = new ArrayList<String>(10);
-//
-//        int delimIndex = line.indexOf(deliminator);
-//
-//        while(delimIndex != -1)
-//        {
-//             delimIndex = line.indexOf(",");
-//
-//            String beforeDelim = line.substring(0,delimIndex);
-//            String afterDelim = line.substring(delimIndex+1);
-//            //check if there is a " behind the delim and a " after the delim.
-//            int quoteCountBeforeDelim = countOccurrences("\"", beforeDelim);
-//            int quoteCountAfterDelim = countOccurrences("\"", afterDelim);
-//
-//            if(! (isOdd(quoteCountBeforeDelim)))
-//            {
-//                //number of quotes before delim is even ex. { "example", }
-//                //therefore this is a valid delimiter.
-//            }
-//            if(isOdd(quoteCountAfterDelim))
-//            //if so do not treat this comma as a delimiter and go to the next one.
-//
-//            //get everything after the deliminator
-//            break;
-//        }
-//
-//
-//        return new String[3];
-    }
+        //put chars in a stack with the last characters being first to go in
+        for(int i = lineArray.length-1; 0 <= i; i--) {
+            Character c = new Character(lineArray[i]);
+            lineStack.push(c);
+        }
 
-    /**
-     * Checks if a number is odd or even
-     *  0%2 = 0 so this will return true;
-     * -1%2 = -1 so it will return false;
-     * @param n - number
-     * @return true if number is odd, false of number is even.
-     */
-    private static boolean isOdd(int n){
-        if(n%2 == 0)
-            return true;
-        else
-            return false;
+        boolean withInQuotes = false;
+        while (!(lineStack.isEmpty()))
+        {
+            Character nextChar = lineStack.peek().charValue();
+
+            //deliminator encountered
+            if(nextChar == deliminator)
+            {
+                if(withInQuotes)
+                {
+                    //there is a possibility we are in between two quotes
+                    //keep pushing into stack
+
+                }else {
+                    //we are not in between quotes
+                    //treat this character as deliminator
+                    lineStack.pop();
+
+                    //flush the splitStack contents and add to the splitList
+                    int size = splitStack.size();
+                    char[] word = new char[size];
+
+                    //iterate from end because splitStack.pop() holds the last character pushed in
+                    for(int i = size-1; 0 <= i; i--)
+                    {
+                        Character c = splitStack.pop();
+                        word[i] = c.charValue();
+                    }
+                    splitList.add(new String(word));
+                    continue;
+                }
+            }
+            
+            //deliminator not encountered
+            if(nextChar == '"')
+            {
+                //if we previously encountered a quote, then this next quote will close the quote.
+                //If we curretly not in between quotes, then this next quote will open the quote.
+                withInQuotes = !(withInQuotes);
+            }
+            Character c = lineStack.pop();
+            splitStack.push(c);
+
+        }
+        //if there are still values in the splitStack that means we only ecountered 1 quote.
+        // i.e the quote was never closed.
+        //therefore treat every deliminator as a deliminator.
+        StringBuilder s = new StringBuilder();
+        while( !(splitStack.isEmpty()) )
+        {
+            char c = splitStack.pollLast().charValue();
+            if(c == deliminator)
+            {
+                String word = s.toString();
+                splitList.add(word); 
+                //reset s
+                s = new StringBuilder();
+            }
+            else {
+                s.append(c);
+            }
+        }
+        if( 0 < s.length())
+            splitList.add(s.toString());
+        return splitList.toArray(new String[splitList.size()]);
+
+        
     }
 
 }
