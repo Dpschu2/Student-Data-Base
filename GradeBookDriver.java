@@ -25,6 +25,8 @@ public class GradeBookDriver {
     public static String file2 = "326-fall-1996.csv";
     public static String file3 = "326-fall-1997.csv";
 
+    private static Scanner keyboard = new Scanner(System.in);
+
     public static void main(String[] args) {
         //addLineToFile("hullo", "file.txt"); to test the method i created
 
@@ -32,12 +34,11 @@ public class GradeBookDriver {
         setUp(file2);
         setUp(file3);
         System.out.println("Welcome to Grade Book Manager");
-        Scanner kb = new Scanner(System.in);
         boolean flag = true;
         do
         {
             displayMenu();
-            String choice = kb.nextLine();
+            String choice = keyboard.nextLine();
             switch (choice.substring(0, 1).toLowerCase())
             {
                 case "a":
@@ -61,6 +62,7 @@ public class GradeBookDriver {
                     System.out.println("Invalid option.\n");
             }
         } while (flag);
+        keyboard.close();
     }
 
     /**
@@ -77,11 +79,9 @@ public class GradeBookDriver {
 
 
         //i. Take file name from the user (course-semester-year.csv).
-        Scanner keyboard = new Scanner(System.in);
         //get filename that user wants to add.
         System.out.print("Enter a file name to add to repository: ");
         String filename = keyboard.nextLine();
-        keyboard.close();
 
         String[] filenameArray = filename.split("-");
         if(filenameArray.length != 3)
@@ -130,6 +130,7 @@ public class GradeBookDriver {
             String line  = fileReader.nextLine();
             readLines.add(line);
         }
+        fileReader.close();
         String[][] file = null;
         //now that we have every line in a file. we can create a primitive 2d array to represent the table
         //[row][column]
@@ -243,8 +244,7 @@ public class GradeBookDriver {
     public static void saveData() {
         boolean more = false;
         System.out.print("Enter student ID: ");
-        Scanner kb = new Scanner(System.in);
-        String studentID = kb.nextLine();
+        String studentID = keyboard.nextLine();
         for (ArrayList<String> categories : mainArray)
         {
             for (String element : categories)
@@ -308,11 +308,10 @@ public class GradeBookDriver {
         int i1 = 0, i2 = 0;
         int[] crs = new int[3], sem = new int[3];
         int aGrade = 0, bGrade = 0, cGrade = 0, dGrade = 0, fGrade = 0;
-        Scanner kb = new Scanner(System.in);
         System.out.print("Enter course number or \"none\" to skip: ");
-        String courseNumber = kb.nextLine();
+        String courseNumber = keyboard.nextLine();
         System.out.print("Enter semester and year(ex:fall 1997) or \"none\" to skip: ");
-        String semYear = kb.nextLine();
+        String semYear = keyboard.nextLine();
         if (semYear.equals("none") && courseNumber.equals("none"))
             more = false;
         if (!semYear.contains("1997") && !semYear.contains("1996") && !semYear.contains("fall"))
