@@ -35,6 +35,17 @@ public class GradeBook{
         return rowLength;
     }
 
+    /**
+     * Scans grade book for the grade column( indicated by GRADE_COLUMN_NAMES)
+     * Then returns an array with the totals for each letter grade.
+     *
+     * a[0] = total number of A's in class
+     * a[1] = total number of B's in class
+     * a[2] = total number of C's in class
+     * a[3] = total number of D's in class
+     * a[4] = total number of F's in class
+     * @return
+     */
     public int[] getGradeBreakDownForClass(){
         int[] grades = new int[5];
         int gradeColumn = -1;

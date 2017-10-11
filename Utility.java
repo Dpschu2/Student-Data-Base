@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Stack;
 
 /**
@@ -11,6 +10,8 @@ public class Utility {
     /**
      * Recursively find all occurrences of a substring in a string.
      * And then replace them with another string
+     * Infinite loop of needle is a substring of the newValue.
+     * Infinite loop if you try to replace the entire string with a bigger string.
      * <p>
      * Since java Strings are immutable, a more efficient approach would be
      * To use a primitive chare array, or the String builder class
@@ -25,9 +26,13 @@ public class Utility {
      * But for now this works fine.
      */
     public static String findAndReplace(String needle, String haystack, String newValue) {
+        //will cause infinate loop and does not change anything
+        if(needle.equals(newValue))
+            return haystack;
         //base case
         if (!(haystack.contains(needle)))
             return haystack;
+
         //reduce to the basecase
         int startOfNeedleIndex = haystack.indexOf(needle);
         String beginning = haystack.substring(0, startOfNeedleIndex);
@@ -64,7 +69,10 @@ public class Utility {
      * @author Michael Metz
      */
     private static int countOccurrences(String needle, String haystack, int num) {
-        //base case
+        //base case 1
+        if(needle.length() == 0 || haystack.length() == 0)
+            return num;
+        //base case 2
         if (!(haystack.contains(needle)))
             return num;
 
@@ -103,7 +111,7 @@ public class Utility {
      * @param deliminator - split apart by
      * @return an array of delimited strings
      */
-    public static String[] splitLineByDeliminatorButIngoreIfInBetweenQuotes(String line, char deliminator){
+    public static String[] splitLineByDeliminatorButIgnoreIfInBetweenQuotes(String line, char deliminator){
 
         char[] lineArray = line.toCharArray();
 

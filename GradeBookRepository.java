@@ -56,7 +56,21 @@ public class GradeBookRepository {
      * @return
      */
     public int[] getGrades(String courseNumber){
-        return new int[3];
+        Iterator<GradeBook> iterator = gradeBooks.iterator();
+        int[] gradeTotal = {0,0,0,0,0};
+        //find book in gradeBooks list
+        while (iterator.hasNext())
+        {
+            GradeBook i = iterator.next();
+            String cn = i.getCourseNumber();
+
+            if (cn.equals(courseNumber))
+            {
+                //grade book matches criteria so add to the gradeTotal.
+                gradeTotal = addArraysElementsTogether(gradeTotal,i.getGradeBreakDownForClass());
+            }
+        }
+        return gradeTotal;
     }
 
     /**
@@ -66,11 +80,61 @@ public class GradeBookRepository {
      * @return
      */
     public int[] getGrades(String semester, String year){
-        return new int[3];
+        Iterator<GradeBook> iterator = gradeBooks.iterator();
+        int[] gradeTotal = {0,0,0,0,0};
+        //find book in gradeBooks list
+        while (iterator.hasNext())
+        {
+            GradeBook i = iterator.next();
+            String sem = i.getSemester();
+            String yr = i.getYear();
+            if (sem.equals(semester) && yr.equals(year))
+            {
+                //grade book matches criteria so add to the gradeTotal.
+                gradeTotal = addArraysElementsTogether(gradeTotal,i.getGradeBreakDownForClass());
+            }
+        }
+        return gradeTotal;
     }
 
     /**
+     * Add two arrays together.  If one array has less elements than the other,
+     * then the array is still added.
+     * ex.
+     * a:{3,1,3,4}
+     * b:{2,3}
+     *
+     * returns {5, 4, 3, 4}
+     * @param a - first array
+     * @param b - second array
+     * @return one array { a[i] + b[i], ...., a[n] + b[n]}
+     */
+    private int[] addArraysElementsTogether(int[] a, int[] b){
+        if(a.length == 0 )
+            return b;
+        if(b.length == 0)
+            return a;
+        if(a.length < b.length)
+        {
+            for (int i =0; i < a.length; i++)
+            {
+                b[i] = b[i] + a[i];
+            }
+            return b;
+        }
+        else{
+            //b is equal to or less then a
+            for (int i =0; i < b.length; i++)
+            {
+                a[i] = b[i] + a[i];
+            }
+            return a;
+        }
+    }
+    /**
      * grade breakdown of a given course across a given semester and year
+     * First locates the proper book the the gradeBooks list
+     * Then returns the getGradeBreakDownForClass On that given book.
      *
      * @param courseNumber
      * @param semester

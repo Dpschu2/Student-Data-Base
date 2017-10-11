@@ -12,7 +12,7 @@ public class GradeBookDriver {
     //new vars
     public static GradeBookRepository gradeBookRepo = new GradeBookRepository();
 
-    //pevious vars
+    //previous vars
     public static ArrayList<ArrayList<String>> mainArray = new ArrayList<>();
     public static ArrayList<ArrayList<String>> tempArray = new ArrayList<>();
     public static ArrayList<String> layer1 = new ArrayList<>();
@@ -144,7 +144,7 @@ public class GradeBookDriver {
             for(int i = 0; i < readLines.size(); i++)
             {
                 String line = readLines.get(i);
-                String[] rowContents = Utility.splitLineByDeliminatorButIngoreIfInBetweenQuotes(line, ',');
+                String[] rowContents = Utility.splitLineByDeliminatorButIgnoreIfInBetweenQuotes(line, ',');
 
                 if(rowContents.length != columnNames.length)
                     System.out.println("row length does not match column length");
