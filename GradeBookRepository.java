@@ -14,6 +14,18 @@ public class GradeBookRepository {
         gradeBooks.add(gb);
     }
 
+    public String getStudentInfo(String studentID){
+        String s = "";
+        Iterator<GradeBook> iterator = gradeBooks.iterator();
+
+        //find book in gradeBooks list
+        while (iterator.hasNext())
+        {
+            GradeBook i = iterator.next();
+            s+= i.getStudentData(studentID) + "\n";
+        }
+        return s;
+    }
     //hasGradeBook methods
 
     /**
@@ -72,7 +84,17 @@ public class GradeBookRepository {
         }
         return gradeTotal;
     }
-
+    public int numStudents(){
+        Iterator<GradeBook> iterator = gradeBooks.iterator();
+        int totalStudents = 0;
+        //find book in gradeBooks list
+        while (iterator.hasNext())
+        {
+            GradeBook i = iterator.next();
+            totalStudents += i.getClassSize();
+        }
+        return totalStudents;
+    }
     /**
      * grade breakdown of all courses across semester and year
      * @param semester

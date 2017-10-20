@@ -1,5 +1,6 @@
 public class GradeBook{
     private static String[] GRADE_COLUMN_NAMES = {"Grade", "grade", "Letter grade"};
+    private static String[] ID_COLUMN_NAMES = {"Student Id", "User ID"};
 
     private String courseNumber;
     private String semester;
@@ -27,7 +28,45 @@ public class GradeBook{
         System.out.printf("%d are in : %s, %s, #%s\n", getClassSize(), year, semester, courseNumber);
     }
 
+    public String getStudentData(String studentId){
+        if(book.length <= 1)
+            return "";
 
+        //find Student Id Column
+        int columnNum = -1;
+        int finalExamCol = -1;
+
+        for(int i = 0; i < book[0].length; i++){
+            for(String col : ID_COLUMN_NAMES)
+                if(book[0][i].equals(col))
+                    columnNum = i;
+            if(book[0][i].equalsIgnoreCase("Final Exam"))
+                finalExamCol = i;
+        }
+        if(columnNum == -1)
+            return "";
+
+        //find student row
+        int studentRow = -1;
+        for(int i = 1; i < book.length; i++){
+            if(book[i][columnNum].equals(studentId))
+                studentRow = i;
+        }
+
+        if(studentRow == -1)
+            return "";
+
+        String finalExam = "Final Exam";
+        String points = "";
+
+        if(finalExamCol == -1)
+            finalExam = "";
+        else
+            points = book[studentRow][finalExamCol];
+
+
+        return String.format("%s,%s,%s,%s,%s,%s",studentId,courseNumber,semester,year,finalExam,points);
+    }
     //creative get methods
     public int getClassSize(){
         int rowLength = book.length;
